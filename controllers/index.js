@@ -28,9 +28,6 @@ const blogController={
 
       const {title,author,content,photo,description} = req.body;
 
-
-      
-
     },
     async delete(req,res,next){
 
