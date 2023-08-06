@@ -1,12 +1,12 @@
 const Joi = require("joi")
 const filestack = require("filestack-js")
 const{FILE_STACK_API_KEY} = require("../config/index")
+const Blog = require("../models/blog")
 const blogController={
 
 
     async getById(req,res,next){
 
-        
     },
     async getAll(req,res,next){
 
@@ -28,22 +28,28 @@ const blogController={
       }
       
       const {title,author,content,photo,description} = req.body;
-
      const client = filestack.init(FILE_STACK_API_KEY)
-     let response ;
+     let photoResponse ;
     try{
-
-    response =  await client.upload(photo)
+    photoResponse =  await client.upload(photo)
     }
-
     catch(error){
       return next(error)
     }
 
-    
 
+    try{
 
+      const blogToSave = new Blog ({
+        title,author,content,photo,description
+      })
 
+      let response = await blogToSave.save()  
+      res.status(201).json({blog:response})
+    }
+    catch(error){ 
+      return next(error)
+    }
 
     },
     async delete(req,res,next){
