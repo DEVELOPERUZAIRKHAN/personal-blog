@@ -1,5 +1,6 @@
 const Joi = require("joi")
-
+const filestack = require("filestack-js")
+const{FILE_STACK_API_KEY} = require("../config/index")
 const blogController={
 
 
@@ -25,8 +26,24 @@ const blogController={
       if(error){
         return next()
       }
-
+      
       const {title,author,content,photo,description} = req.body;
+
+     const client = filestack.init(FILE_STACK_API_KEY)
+     let response ;
+    try{
+
+    response =  await client.upload(photo)
+    }
+
+    catch(error){
+      return next(error)
+    }
+
+    
+
+
+
 
     },
     async delete(req,res,next){
