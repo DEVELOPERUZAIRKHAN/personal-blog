@@ -1,9 +1,9 @@
 const Joi = require("joi")
 const filestack = require("filestack-js")
 const{FILE_STACK_API_KEY} = require("../config/index")
+const crypto = require("crypto");
 const Blog = require("../models/blog")
 const blogController={
-
 
     async getById(req,res,next){
 
@@ -12,10 +12,10 @@ const blogController={
 
     },
     async create(req,res,next){
-
+        const myStr = crypto.randomBytes(13).toString("hex");
         const blogSchema = Joi.object({
             title:Joi.string().min(5).max(50).required(),
-            description:Joi.string().min(50).max(150).required(),
+            description:Joi.string().required(),
             content:Joi.string().required(),
             author:Joi.string().required().min(5).max(30),
             photo:Joi.string().required()
@@ -24,7 +24,7 @@ const blogController={
 
       const{error} =  blogSchema.validate(req.body)
       if(error){
-        return next()
+        return next(error);
       }
       
       const {title,author,content,photo,description} = req.body;
@@ -32,6 +32,8 @@ const blogController={
      let photoResponse ;
     try{
     photoResponse =  await client.upload(photo)
+    console.log(photoResponse)
+    console.log("url" ,photoResponse.url)
     }
     catch(error){
       return next(error)
@@ -39,9 +41,8 @@ const blogController={
 
 
     try{
-
       const blogToSave = new Blog ({
-        title,author,content,photo,description
+        title,author,content,photo:photoResponse.url,description
       })
 
       let response = await blogToSave.save()  

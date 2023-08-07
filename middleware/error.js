@@ -1,8 +1,15 @@
 const Joi = require("joi")
-const{ValidationError} =Joi;
 
+function error (err,req,res,next){
 
-module.exports = function(err,req,res,next){
+    if (err instanceof Joi.ValidationError){
+        errorResponse ={
+            error:{message:err.details}
+        }
+
+        res.status(400).json(errorResponse)
+    }
+
 
     const errorStatus = err.statusCode|| 500;
 
@@ -16,3 +23,5 @@ console.error(err)
 
 res.status(errorStatus).json(errorResponse)
 }
+
+module.exports = error

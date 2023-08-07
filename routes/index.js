@@ -15,7 +15,7 @@ router.get("/blogs",blogController.getAll)
 router.get("/blogs/:id",blogController.getById)
 
 // post the blog post
-router.post("/blogs",blogController.create)
+router.post("/create",blogController.create)
 
 // edit the blog post
 router.put("/blogs/:id",blogController.update)
