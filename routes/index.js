@@ -1,4 +1,7 @@
 const express =require("express");
+const multer = require("multer")
+const storage = multer.memoryStorage()
+const upload = multer({storage:storage})
 const blogController = require( "../controllers/index")
 const router =express.Router()
 
@@ -15,7 +18,7 @@ router.get("/blogs",blogController.getAll)
 router.get("/blogs/:id",blogController.getById)
 
 // post the blog post
-router.post("/create",blogController.create)
+router.post("/create",upload.single("file"),blogController.create)
 
 // edit the blog post
 router.put("/blogs/:id",blogController.update)
