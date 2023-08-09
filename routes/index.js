@@ -12,7 +12,7 @@ router.get("/test",(req,res,next)=>{
 
 
 // get all blogs
-router.get("/blogs",blogController.getAll)
+router.get("/blogs/all",blogController.getAll)
 
 // get blog by id
 router.get("/blogs/:blogId",blogController.getById)

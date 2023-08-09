@@ -5,22 +5,37 @@ const Blog = require("../models/blog")
 const blogController={
 
     async getById(req,res,next){
-
      const {blogId} = req.params;
      let blog
      try{
          blog = await  Blog.findOne({_id:blogId})
      }
-
      catch(error){
       return next(error)
      }
-    res.status(200).json({blog})     
+    res.status(200).json({blog})
     },
-    async getAll(req,res,next){
 
+
+
+
+    async getAll(req,res,next){
+      let blogs
+      try{
+     blogs = await Blog.find({})
+      }
+      catch(error){
+        return next(error)
+      }
+
+      res.status(200).json({blogs})
     },
     
+
+
+
+
+
     async create(req,res,next){
       
       const uploadedFile = req.file;
@@ -86,6 +101,14 @@ let response;
     }})
 
     },
+
+
+
+
+
+
+
+
     async delete(req,res,next){
 
     },
