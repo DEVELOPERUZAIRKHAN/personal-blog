@@ -6,6 +6,16 @@ const blogController={
 
     async getById(req,res,next){
 
+     const {blogId} = req.params;
+     let blog
+     try{
+         blog = await  Blog.findOne({_id:blogId})
+     }
+
+     catch(error){
+      return next(error)
+     }
+    res.status(200).json({blog})     
     },
     async getAll(req,res,next){
 

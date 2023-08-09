@@ -15,7 +15,7 @@ router.get("/test",(req,res,next)=>{
 router.get("/blogs",blogController.getAll)
 
 // get blog by id
-router.get("/blogs/:id",blogController.getById)
+router.get("/blogs/:blogId",blogController.getById)
 
 // post the blog post
 router.post("/create",upload.single("file"),blogController.create)
