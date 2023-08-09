@@ -126,15 +126,81 @@ let response;
 
 
 
-    
+
     async update(req,res,next){
 
       const {blogId} = req.params;
+// validating the text of the blog
+     const blogSchema = Joi.object({
+        title:Joi.string().min(5).max(50),
+        description:Joi.string(),
+        content:Joi.string(),
+        author:Joi.string().min(5).max(30),
+      })
+    const{error}  =  blogSchema.validate(req.body);
+    if(error){
+      return next(error)
+    }
 
+    if(req.file){
+    const client =  filestack.init(FILE_STACK_API_KEY)
+    if(req.file.mimetype!==('image/jpeg'||'image/jpg'||'image/png')) {
+      const error = {
+        status :400,
+        message:"The file submitted is not an image file"
+      }
+      return next(error)
+    } 
+    
+    if(req.file.size>10*1024*1024){
+        const error ={
+          status : 400,
+          message:"The Image size exceeded the limit"
+        }
+        return next(error)
+      }
+let photoResponse;
+      try{
+
+photoResponse = await client.upload(req.file.buffer)
+}
+catch(error){
+  return next(error)
+}
+
+
+
+let response ;
+
+req.body.photo = photoResponse.url;
+try{
+  response = await Blog.updateOne({_id:blogId},{$set:req.body})
+}
+catch(error){
+  const eror ={
+    status:400,
+    message:"Error updating the blog"
+  }
+  return next(eror);
+
+}
+return res.status(201).json(response)
+    }
+
+      let response;
+      try{
+      response = await Blog.updateOne({_id:blogId},{$set:req.body})
+        }
+        catch(error){
+          const eror ={
+            status:400,
+            message:"Error Updating blog"
+          }
+          return next (eror)
+        }
+    return  res.status(202).json({response})
 
     }
 
 };
-
-
 module.exports = blogController;
