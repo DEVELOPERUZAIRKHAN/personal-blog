@@ -13,7 +13,7 @@ const blogController={
      catch(error){
       return next(error)
      }
-    res.status(200).json({blog})
+   return res.status(200).json({blog})
     },
 
 
@@ -28,7 +28,7 @@ const blogController={
         return next(error)
       }
 
-      res.status(200).json({blogs})
+    return  res.status(200).json({blogs})
     },
     
 
@@ -110,9 +110,27 @@ let response;
 
 
     async delete(req,res,next){
+     const {blogId} = req.params;
+let response;
+     try{
+       response = await Blog.deleteOne({_id:blogId})
 
+     }
+     catch(error){
+      return next(error)
+     }
+     res.status(201).json(response)
     },
+
+
+
+
+
+    
     async update(req,res,next){
+
+      const {blogId} = req.params;
+
 
     }
 

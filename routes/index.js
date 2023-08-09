@@ -24,7 +24,7 @@ router.post("/create",upload.single("file"),blogController.create)
 router.put("/blogs/:id",blogController.update)
 
 // delete the blog post
-router.delete("/blogs/:id",blogController.delete)
+router.delete("/blogs/:blogId",blogController.delete)
 
 
 module.exports = router
