@@ -132,15 +132,22 @@ let response;
       const {blogId} = req.params;
 // validating the text of the blog
      const blogSchema = Joi.object({
-        title:Joi.string().min(5).max(50),
-        description:Joi.string(),
-        content:Joi.string(),
-        author:Joi.string().min(5).max(30),
+        title:Joi.string().min(5).max(50).required(),
+        description:Joi.string().required(),
+        content:Joi.string().required(),
+        author:Joi.string().min(5).max(30).required(),
       })
-    const{error}  =  blogSchema.validate(req.body);
-    if(error){
-      return next(error)
-    }
+      try{
+
+        const{error}  = await  blogSchema.validate(req.body);
+        if(error){
+          return next(error)
+        }
+      }
+      catch(error){
+        return next(error)
+      }
+    console.log(req.body)
 
     if(req.file){
     const client =  filestack.init(FILE_STACK_API_KEY)
@@ -161,17 +168,12 @@ let response;
       }
 let photoResponse;
       try{
-
-photoResponse = await client.upload(req.file.buffer)
+        photoResponse = await client.upload(req.file.buffer)
 }
 catch(error){
   return next(error)
 }
-
-
-
 let response ;
-
 req.body.photo = photoResponse.url;
 try{
   response = await Blog.updateOne({_id:blogId},{$set:req.body})
@@ -199,8 +201,6 @@ return res.status(201).json(response)
           return next (eror)
         }
     return  res.status(202).json({response})
-
     }
-
 };
 module.exports = blogController;

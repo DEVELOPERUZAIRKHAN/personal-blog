@@ -21,7 +21,7 @@ router.get("/blogs/:blogId",blogController.getById)
 router.post("/create",upload.single("file"),blogController.create)
 
 // edit the blog post
-router.put("/blogs/:blogId",blogController.update)
+router.put("/blogs/:blogId",upload.single("file"),blogController.update)
 
 // delete the blog post
 router.delete("/blogs/:blogId",blogController.delete)
