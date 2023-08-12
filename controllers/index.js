@@ -40,8 +40,8 @@ const blogController={
       
       const uploadedFile = req.file;
         const blogSchema = Joi.object({
-            title:Joi.string().min(5).max(50).required(),
-            description:Joi.string().required(),
+            title:Joi.string().min(5).max(80).required(),
+            description:Joi.string().required().max(200).min(50),
             content:Joi.string().required(),
             author:Joi.string().required().min(5).max(30),
         })
@@ -53,6 +53,7 @@ const blogController={
       }
       //validating the photo
 const{title,content,description,author} = req.body;
+
       if(!uploadedFile){
         
         const error = {
@@ -61,7 +62,7 @@ const{title,content,description,author} = req.body;
         }
       return  next(error)
       }
-      if(uploadedFile.mimetype!==('image/jpeg'||'image/jpg'||'image/png')){
+      if((uploadedFile.mimetype!=='image/jpeg')&&(uploadedFile.mimetype!=='image/jpg')&&(uploadedFile.mimetype!=='image/png')){
         const error ={
           message:"The uploaded file is not image",
           status:400
@@ -132,14 +133,14 @@ let response;
       const {blogId} = req.params;
 // validating the text of the blog
      const blogSchema = Joi.object({
-        title:Joi.string().min(5).max(50).required(),
-        description:Joi.string().required(),
+        title:Joi.string().min(5).max(80).required(),
+        description:Joi.string().required().min(50).max(  200),
         content:Joi.string().required(),
         author:Joi.string().min(5).max(30).required(),
       })
       try{
 
-        const{error}  = await  blogSchema.validate(req.body);
+        const{error}  =  await  blogSchema.validate(req.body);
         if(error){
           return next(error)
         }
@@ -177,6 +178,7 @@ let response ;
 req.body.photo = photoResponse.url;
 try{
   response = await Blog.updateOne({_id:blogId},{$set:req.body})
+  
 }
 catch(error){
   const eror ={

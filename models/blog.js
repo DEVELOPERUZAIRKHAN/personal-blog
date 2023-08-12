@@ -8,6 +8,8 @@ const blogSchema = new Schema ({
     description:{type:String,required:true},
     photo:{type:String,required:true},
     author:{type:String,required:true}
+},{
+    timestamps:true
 })
 
 
