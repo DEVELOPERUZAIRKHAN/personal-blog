@@ -46,7 +46,6 @@ const blogController={
             author:Joi.string().required().min(5).max(30),
         })
 
-
       const{error} =  blogSchema.validate(req.body)
       if(error){
         return next(error);

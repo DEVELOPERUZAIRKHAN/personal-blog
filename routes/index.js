@@ -2,7 +2,7 @@ const express =require("express");
 const multer = require("multer")
 const storage = multer.memoryStorage()
 const upload = multer({storage:storage})
-const blogController = require( "../controllers/index")
+const blogController = require("../controllers/index")
 const router =express.Router()
 
 // Just testing the backend
